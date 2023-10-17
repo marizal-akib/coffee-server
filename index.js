@@ -10,7 +10,7 @@ app.use(express.json());
 
 console.log(process.env.DB_USER);
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ak4rw.mongodb.net/?retryWrites=true&w=majority`
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ak4rw.mongodb.net/?retryWrites=true`
 console.log(uri);
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -35,6 +35,14 @@ async function run() {
         const result = await coffeeCollection.insertOne(newCoffee);
         res.send(result);
     })
+
+    app.get('/coffee', async(req, res) =>{
+        const cursor = coffeeCollection.find();
+        const result = await cursor.toArray();
+        res.send(result);
+    })
+
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
